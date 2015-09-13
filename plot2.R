@@ -1,0 +1,10 @@
+#Check for class(Date) as it should be Date and not Character or Format, The date should be POSIX
+png("plot2.png")
+data <- read.table(pipe('grep "^[1-2]/2/2007" "household_power_consumption.txt"'),sep=";",col.names = c("Date","Time","Global_active_power","Global_reactive_power","Voltage","Global_intensity","Sub_metering_1","Sub_metering_2","Sub_metering_3"),na.strings = "?")
+data$Date <- as.Date(data$Date, format='%d/%m/%Y')
+data$DateTime <- paste(data$Date,data$Time)
+data$DateTime <- strptime(data$DateTime,format="%Y-%m-%d %H:%M:%S")
+class(data$Date)
+class(data$DateTime)
+plot(data$DateTime,data$Global_active_power, ylab="Global Active Power (kilowatts)",xlab="",type="l",lty=1,lwd=1)
+dev.off()

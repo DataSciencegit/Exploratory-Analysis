@@ -1,0 +1,12 @@
+#First draw the first plot and then the line
+png("plot3.png")
+data <- read.table(pipe('grep "^[1-2]/2/2007" "household_power_consumption.txt"'),sep=";",col.names = c("Date","Time","Global_active_power","Global_reactive_power","Voltage","Global_intensity","Sub_metering_1","Sub_metering_2","Sub_metering_3"),na.strings = "?")
+data$Date <- as.Date(data$Date, format='%d/%m/%Y')
+data$DateTime <- paste(data$Date,data$Time)
+data$DateTime <- strptime(data$DateTime,format="%Y-%m-%d %H:%M:%S")
+par(mfrow = c(1, 1))
+plot(data$DateTime, data$Sub_metering_1, col="black", type="l",lty=1,lwd=1,ylab="Energy sub metering")
+lines(data$DateTime, data$Sub_metering_2, col="red",type="l",lty=1,lwd=1)
+lines(data$DateTime, data$Sub_metering_3, col="blue",type="l",lty=1,lwd=1)
+legend("topright", col = c("black", "red", "blue"), legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty=1)
+dev.off()
